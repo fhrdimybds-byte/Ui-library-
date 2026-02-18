@@ -529,7 +529,7 @@ local RayfieldLibrary = {
     SecondaryElementStroke = Color3.fromRGB(0, 255, 120), -- Detalhes secundários em neon
 
     SliderBackground = Color3.fromRGB(30, 30, 30),
-    SliderProgress = Color3.fromRGB(0, 255, 120), -- Progresso do slider em neon
+    SliderProgress = Color3.fromRGB(0, 90, 0), -- Progresso do slider em neon
     SliderStroke = Color3.fromRGB(0, 100, 50),
 
     ToggleBackground = Color3.fromRGB(30, 30, 30),
