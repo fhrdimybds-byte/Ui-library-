@@ -2,7 +2,7 @@ Library = {}
 SaveTheme = {}
 
 local themes = {
-	index = {'Dark', 'Amethyst','Obsidian','NeonPulse','EmeraldNight','CrimsonVoid'},
+	index = {'Dark', 'Amethyst','Obsidian','NeonPulse','EmeraldNight','CrimsonVoid','Darker'},
 	Amethyst = {
 		['Shadow'] = Color3.fromRGB(24, 24, 31),
 		['Background'] = Color3.fromRGB(29, 28, 38),
@@ -79,6 +79,85 @@ local themes = {
 			}
 		}
 	},
+	Darker = {
+    ['Shadow'] = Color3.fromRGB(0, 0, 3),
+    ['Background'] = Color3.fromRGB(6, 6, 10),
+    ['Page'] = Color3.fromRGB(4, 4, 8),
+    ['Main'] = Color3.fromRGB(110, 70, 210),
+    ['Text & Icon'] = Color3.fromRGB(225, 225, 240),
+    ['Function'] = {
+        ['Toggle'] = {
+            ['Background'] = Color3.fromRGB(8, 8, 14),
+            ['True'] = {
+                ['Toggle Background'] = Color3.fromRGB(28, 18, 65),
+                ['Toggle Value'] = Color3.fromRGB(110, 70, 210),
+            },
+            ['False'] = {
+                ['Toggle Background'] = Color3.fromRGB(12, 12, 18),
+                ['Toggle Value'] = Color3.fromRGB(38, 38, 55),
+            }
+        },
+        ['Label'] = {
+            ['Background'] = Color3.fromRGB(8, 8, 14),
+        },
+        ['Dropdown'] = {
+            ['Background'] = Color3.fromRGB(8, 8, 14),
+            ['Value Background'] = Color3.fromRGB(4, 4, 8),
+            ['Value Stroke'] = Color3.fromRGB(160, 160, 190),
+            ['Dropdown Select'] = {
+                ['Background'] = Color3.fromRGB(6, 6, 10),
+                ['Search'] = Color3.fromRGB(14, 14, 22),
+                ['Item Background'] = Color3.fromRGB(18, 18, 28),
+            }
+        },
+        ['Slider'] = {
+            ['Background'] = Color3.fromRGB(8, 8, 14),
+            ['Value Background'] = Color3.fromRGB(4, 4, 8),
+            ['Value Stroke'] = Color3.fromRGB(160, 160, 190),
+            ['Slider Bar'] = Color3.fromRGB(28, 18, 65),
+            ['Slider Bar Value'] = Color3.fromRGB(110, 70, 210),
+            ['Circle Value'] = Color3.fromRGB(225, 225, 240)
+        },
+        ['Code'] = {
+            ['Background'] = ColorSequence.new{
+                ColorSequenceKeypoint.new(0, Color3.fromRGB(8, 8, 14)),
+                ColorSequenceKeypoint.new(1, Color3.fromRGB(8, 8, 14))
+            },
+            ['Background Code'] = Color3.fromRGB(18, 20, 32),
+            ['Background Code Value'] = Color3.fromRGB(12, 14, 24),
+            ['ScrollingFrame Code'] = Color3.fromRGB(130, 170, 240)
+        },
+        ['Button'] = {
+            ['Background'] = Color3.fromRGB(8, 8, 14),
+            ['Click'] = Color3.fromRGB(225, 225, 240)
+        },
+        ['Textbox'] = {
+            ['Background'] = Color3.fromRGB(8, 8, 14),
+            ['Value Background'] = Color3.fromRGB(4, 4, 8),
+            ['Value Stroke'] = Color3.fromRGB(160, 160, 190),
+        },
+        ['Keybind'] = {
+            ['Background'] = Color3.fromRGB(8, 8, 14),
+            ['Value Background'] = Color3.fromRGB(4, 4, 8),
+            ['Value Stroke'] = Color3.fromRGB(160, 160, 190),
+            ['True'] = {
+                ['Toggle Background'] = Color3.fromRGB(28, 18, 65),
+                ['Toggle Value'] = Color3.fromRGB(110, 70, 210),
+            },
+            ['False'] = {
+                ['Toggle Background'] = Color3.fromRGB(12, 12, 18),
+                ['Toggle Value'] = Color3.fromRGB(38, 38, 55),
+            }
+        },
+        ['Color Picker'] = {
+            ['Background'] = Color3.fromRGB(8, 8, 14),
+            ['Color Select'] = {
+                ['Background'] = Color3.fromRGB(4, 4, 8),
+                ['UIStroke'] = Color3.fromRGB(160, 160, 190),
+            }
+        }
+    }
+},
 	CrimsonVoid = {
     ['Shadow'] = Color3.fromRGB(15, 5, 5),
     ['Background'] = Color3.fromRGB(22, 10, 10),
@@ -4802,11 +4881,101 @@ function Library:Window(p)
 
 			if not firsttime then
 				firsttime = true
-				Tabs:Notify({
-					Title = 'Dummy Kawaii',
-					Desc = 'Press the <font color="#FF77A5" size="14">('..tostring(Keybind):gsub("Enum.KeyCode.", "")..')</font> button to hide and show the UI',
-					Time = 10
-				})
+				local TweenService = game:GetService("TweenService")
+local HttpService = game:GetService("HttpService")
+
+local TweenService = game:GetService("TweenService")
+
+local function SendSarturnNotif(title, text, duration)
+    local duration = duration or 5
+    local NotifGui = Instance.new("ScreenGui", game.CoreGui)
+    
+    -- Frame Principal (Darker Theme)
+    local Main = Instance.new("Frame", NotifGui)
+    Main.Size = UDim2.new(0, 280, 0, 75)
+    Main.Position = UDim2.new(1, 30, 1, -100)
+    Main.BackgroundColor3 = Color3.fromRGB(6, 6, 10) -- Background Darker
+    Main.BorderSizePixel = 0
+    
+    local Corner = Instance.new("UICorner", Main)
+    Corner.CornerRadius = UDim.new(0, 10)
+    
+    local Stroke = Instance.new("UIStroke", Main)
+    Stroke.Color = Color3.fromRGB(110, 70, 210) -- Main Amethyst
+    Stroke.Thickness = 1.2
+
+    -- Botão de Fechar (O "X")
+    local CloseBtn = Instance.new("TextButton", Main)
+    CloseBtn.Size = UDim2.new(0, 20, 0, 20)
+    CloseBtn.Position = UDim2.new(1, -25, 0, 5)
+    CloseBtn.BackgroundTransparency = 1
+    CloseBtn.Text = "×"
+    CloseBtn.TextColor3 = Color3.fromRGB(160, 160, 190) -- Value Stroke Color
+    CloseBtn.TextSize = 20
+    CloseBtn.Font = Enum.Font.GothamBold
+
+    -- Título e Texto
+    local T = Instance.new("TextLabel", Main)
+    T.Text = title
+    T.Size = UDim2.new(1, -50, 0, 25)
+    T.Position = UDim2.new(0, 12, 0, 8)
+    T.TextColor3 = Color3.fromRGB(110, 70, 210)
+    T.Font = Enum.Font.GothamBold
+    T.TextSize = 14
+    T.BackgroundTransparency = 1
+    T.TextXAlignment = Enum.TextXAlignment.Left
+
+    local Desc = Instance.new("TextLabel", Main)
+    Desc.Text = text
+    Desc.Size = UDim2.new(1, -25, 0, 30)
+    Desc.Position = UDim2.new(0, 12, 0, 30)
+    Desc.TextColor3 = Color3.fromRGB(225, 225, 240)
+    Desc.Font = Enum.Font.Gotham
+    Desc.TextSize = 12
+    Desc.BackgroundTransparency = 1
+    Desc.TextXAlignment = Enum.TextXAlignment.Left
+    Desc.TextWrapped = true
+
+    -- Barra de Timer (Progresso)
+    local TimerBack = Instance.new("Frame", Main)
+    TimerBack.Size = UDim2.new(1, -20, 0, 3)
+    TimerBack.Position = UDim2.new(0, 10, 1, -8)
+    TimerBack.BackgroundColor3 = Color3.fromRGB(28, 18, 65) -- Slider Bar (Darker)
+    TimerBack.BorderSizePixel = 0
+    Instance.new("UICorner", TimerBack)
+
+    local TimerFill = Instance.new("Frame", TimerBack)
+    TimerFill.Size = UDim2.new(1, 0, 1, 0)
+    TimerFill.BackgroundColor3 = Color3.fromRGB(110, 70, 210) -- Slider Bar Value
+    TimerFill.BorderSizePixel = 0
+    Instance.new("UICorner", TimerFill)
+
+    -- Lógica de Fechar Manual
+    local closed = false
+    local function dismiss()
+        if closed then return end
+        closed = true
+        Main:TweenPosition(UDim2.new(1, 30, 1, -100), "In", "Quint", 0.5, true, function()
+            NotifGui:Destroy()
+        end)
+    end
+
+    CloseBtn.MouseButton1Click:Connect(dismiss)
+
+    -- Animações
+    Main:TweenPosition(UDim2.new(1, -290, 1, -100), "Out", "Quint", 0.5, true)
+    
+    -- Animação do Timer (Barra encolhendo)
+    local timerTween = TweenService:Create(TimerFill, TweenInfo.new(duration, Enum.EasingStyle.Linear), {Size = UDim2.new(0, 0, 1, 0)})
+    timerTween:Play()
+
+    -- Fecha automático após o tempo
+    task.delay(duration, function()
+        if not closed then dismiss() end
+    end)
+end
+
+				SendSarturnNotif("Sarturn hub", "Press the <font color="#FF77A5" size="13">('..tostring(Keybind):gsub("Enum.KeyCode.", "")..')</font> button to hide and show the UI", 10)
 			end
 		end
 
@@ -4905,7 +5074,7 @@ function Library:Window(p)
 
 		Close_1.MouseButton1Click:Connect(function()
 			Tabs:Dialog({
-				Title = "Do you want to <font color='#FF0000'>close</font> the ui?",
+				Title = "Do you want to <font color='#FF0000'>close</font> the Sarturn hub?",
 				Button1 = {
 					Title = 'Confirm',
 					Color = Color3.fromRGB(0, 188, 0),
