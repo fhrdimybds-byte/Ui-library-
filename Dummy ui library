@@ -1,3 +1,124 @@
+
+
+-- [ CONFIGURAÇÕES DE KEY & SAVE ] --
+local KeySettings = {
+    ["RealKey"] = "Key 2 -)-)(+(++(-)(-+)(+)+((-+()(-+)+(-+(+)-+(()",
+    ["Link"] = "https://rekonise.com/get-key-sarturn-hub-brookhaven-rp-aq72n",
+    ["FileName"] = "SarturnKey_Save.txt" -- Nome do arquivo na pasta do executor
+}
+
+-- [ FUNÇÃO PARA SALVAR A KEY ] --
+local function SaveKey(key)
+    if writefile then
+        writefile(KeySettings.FileName, key)
+    end
+end
+
+-- [ VERIFICAÇÃO DE AUTO-SAVE ] --
+if isfile and isfile(KeySettings.FileName) then
+    local SavedKey = readfile(KeySettings.FileName)
+    if SavedKey == KeySettings.RealKey then
+        SendSarturnNotif("Auto-Login", "Saved key detected! Loading...", 5)
+        task.wait(1)
+        LoadSarturnMainHub() -- Pula a UI e carrega o Hub direto
+        return -- Para o script aqui para não abrir a UI de Key
+    end
+end
+
+local TweenService = game:GetService("TweenService")
+local HttpService = game:GetService("HttpService")
+
+local TweenService = game:GetService("TweenService")
+
+local function SendSarturnNotif(title, text, duration)
+    local duration = duration or 5
+    local NotifGui = Instance.new("ScreenGui", game.CoreGui)
+    
+    -- Frame Principal (Darker Theme)
+    local Main = Instance.new("Frame", NotifGui)
+    Main.Size = UDim2.new(0, 280, 0, 75)
+    Main.Position = UDim2.new(1, 30, 1, -100)
+    Main.BackgroundColor3 = Color3.fromRGB(6, 6, 10) -- Background Darker
+    Main.BorderSizePixel = 0
+    
+    local Corner = Instance.new("UICorner", Main)
+    Corner.CornerRadius = UDim.new(0, 10)
+    
+    local Stroke = Instance.new("UIStroke", Main)
+    Stroke.Color = Color3.fromRGB(110, 70, 210) -- Main Amethyst
+    Stroke.Thickness = 1.2
+
+    -- Botão de Fechar (O "X")
+    local CloseBtn = Instance.new("TextButton", Main)
+    CloseBtn.Size = UDim2.new(0, 20, 0, 20)
+    CloseBtn.Position = UDim2.new(1, -25, 0, 5)
+    CloseBtn.BackgroundTransparency = 1
+    CloseBtn.Text = "×"
+    CloseBtn.TextColor3 = Color3.fromRGB(160, 160, 190) -- Value Stroke Color
+    CloseBtn.TextSize = 20
+    CloseBtn.Font = Enum.Font.GothamBold
+
+    -- Título e Texto
+    local T = Instance.new("TextLabel", Main)
+    T.Text = title
+    T.Size = UDim2.new(1, -50, 0, 25)
+    T.Position = UDim2.new(0, 12, 0, 8)
+    T.TextColor3 = Color3.fromRGB(110, 70, 210)
+    T.Font = Enum.Font.GothamBold
+    T.TextSize = 14
+    T.BackgroundTransparency = 1
+    T.TextXAlignment = Enum.TextXAlignment.Left
+
+    local Desc = Instance.new("TextLabel", Main)
+    Desc.Text = text
+    Desc.Size = UDim2.new(1, -25, 0, 30)
+    Desc.Position = UDim2.new(0, 12, 0, 30)
+    Desc.TextColor3 = Color3.fromRGB(225, 225, 240)
+    Desc.Font = Enum.Font.Gotham
+    Desc.TextSize = 12
+    Desc.BackgroundTransparency = 1
+    Desc.TextXAlignment = Enum.TextXAlignment.Left
+    Desc.TextWrapped = true
+
+    -- Barra de Timer (Progresso)
+    local TimerBack = Instance.new("Frame", Main)
+    TimerBack.Size = UDim2.new(1, -20, 0, 3)
+    TimerBack.Position = UDim2.new(0, 10, 1, -8)
+    TimerBack.BackgroundColor3 = Color3.fromRGB(28, 18, 65) -- Slider Bar (Darker)
+    TimerBack.BorderSizePixel = 0
+    Instance.new("UICorner", TimerBack)
+
+    local TimerFill = Instance.new("Frame", TimerBack)
+    TimerFill.Size = UDim2.new(1, 0, 1, 0)
+    TimerFill.BackgroundColor3 = Color3.fromRGB(110, 70, 210) -- Slider Bar Value
+    TimerFill.BorderSizePixel = 0
+    Instance.new("UICorner", TimerFill)
+
+    -- Lógica de Fechar Manual
+    local closed = false
+    local function dismiss()
+        if closed then return end
+        closed = true
+        Main:TweenPosition(UDim2.new(1, 30, 1, -100), "In", "Quint", 0.5, true, function()
+            NotifGui:Destroy()
+        end)
+    end
+
+    CloseBtn.MouseButton1Click:Connect(dismiss)
+
+    -- Animações
+    Main:TweenPosition(UDim2.new(1, -290, 1, -100), "Out", "Quint", 0.5, true)
+    
+    -- Animação do Timer (Barra encolhendo)
+    local timerTween = TweenService:Create(TimerFill, TweenInfo.new(duration, Enum.EasingStyle.Linear), {Size = UDim2.new(0, 0, 1, 0)})
+    timerTween:Play()
+
+    -- Fecha automático após o tempo
+    task.delay(duration, function()
+        if not closed then dismiss() end
+    end)
+end
+
 Library = {}
 SaveTheme = {}
 
@@ -4881,100 +5002,6 @@ function Library:Window(p)
 
 			if not firsttime then
 				firsttime = true
-				local TweenService = game:GetService("TweenService")
-local HttpService = game:GetService("HttpService")
-
-local TweenService = game:GetService("TweenService")
-
-local function SendSarturnNotif(title, text, duration)
-    local duration = duration or 5
-    local NotifGui = Instance.new("ScreenGui", game.CoreGui)
-    
-    -- Frame Principal (Darker Theme)
-    local Main = Instance.new("Frame", NotifGui)
-    Main.Size = UDim2.new(0, 280, 0, 75)
-    Main.Position = UDim2.new(1, 30, 1, -100)
-    Main.BackgroundColor3 = Color3.fromRGB(6, 6, 10) -- Background Darker
-    Main.BorderSizePixel = 0
-    
-    local Corner = Instance.new("UICorner", Main)
-    Corner.CornerRadius = UDim.new(0, 10)
-    
-    local Stroke = Instance.new("UIStroke", Main)
-    Stroke.Color = Color3.fromRGB(110, 70, 210) -- Main Amethyst
-    Stroke.Thickness = 1.2
-
-    -- Botão de Fechar (O "X")
-    local CloseBtn = Instance.new("TextButton", Main)
-    CloseBtn.Size = UDim2.new(0, 20, 0, 20)
-    CloseBtn.Position = UDim2.new(1, -25, 0, 5)
-    CloseBtn.BackgroundTransparency = 1
-    CloseBtn.Text = "×"
-    CloseBtn.TextColor3 = Color3.fromRGB(160, 160, 190) -- Value Stroke Color
-    CloseBtn.TextSize = 20
-    CloseBtn.Font = Enum.Font.GothamBold
-
-    -- Título e Texto
-    local T = Instance.new("TextLabel", Main)
-    T.Text = title
-    T.Size = UDim2.new(1, -50, 0, 25)
-    T.Position = UDim2.new(0, 12, 0, 8)
-    T.TextColor3 = Color3.fromRGB(110, 70, 210)
-    T.Font = Enum.Font.GothamBold
-    T.TextSize = 14
-    T.BackgroundTransparency = 1
-    T.TextXAlignment = Enum.TextXAlignment.Left
-
-    local Desc = Instance.new("TextLabel", Main)
-    Desc.Text = text
-    Desc.Size = UDim2.new(1, -25, 0, 30)
-    Desc.Position = UDim2.new(0, 12, 0, 30)
-    Desc.TextColor3 = Color3.fromRGB(225, 225, 240)
-    Desc.Font = Enum.Font.Gotham
-    Desc.TextSize = 12
-    Desc.BackgroundTransparency = 1
-    Desc.TextXAlignment = Enum.TextXAlignment.Left
-    Desc.TextWrapped = true
-
-    -- Barra de Timer (Progresso)
-    local TimerBack = Instance.new("Frame", Main)
-    TimerBack.Size = UDim2.new(1, -20, 0, 3)
-    TimerBack.Position = UDim2.new(0, 10, 1, -8)
-    TimerBack.BackgroundColor3 = Color3.fromRGB(28, 18, 65) -- Slider Bar (Darker)
-    TimerBack.BorderSizePixel = 0
-    Instance.new("UICorner", TimerBack)
-
-    local TimerFill = Instance.new("Frame", TimerBack)
-    TimerFill.Size = UDim2.new(1, 0, 1, 0)
-    TimerFill.BackgroundColor3 = Color3.fromRGB(110, 70, 210) -- Slider Bar Value
-    TimerFill.BorderSizePixel = 0
-    Instance.new("UICorner", TimerFill)
-
-    -- Lógica de Fechar Manual
-    local closed = false
-    local function dismiss()
-        if closed then return end
-        closed = true
-        Main:TweenPosition(UDim2.new(1, 30, 1, -100), "In", "Quint", 0.5, true, function()
-            NotifGui:Destroy()
-        end)
-    end
-
-    CloseBtn.MouseButton1Click:Connect(dismiss)
-
-    -- Animações
-    Main:TweenPosition(UDim2.new(1, -290, 1, -100), "Out", "Quint", 0.5, true)
-    
-    -- Animação do Timer (Barra encolhendo)
-    local timerTween = TweenService:Create(TimerFill, TweenInfo.new(duration, Enum.EasingStyle.Linear), {Size = UDim2.new(0, 0, 1, 0)})
-    timerTween:Play()
-
-    -- Fecha automático após o tempo
-    task.delay(duration, function()
-        if not closed then dismiss() end
-    end)
-end
-
 				SendSarturnNotif("Sarturn hub", "Press the <font color="#FF77A5" size="13">('..tostring(Keybind):gsub("Enum.KeyCode.", "")..')</font> button to hide and show the UI", 10)
 			end
 		end
@@ -5179,3 +5206,53 @@ end
 end
 
 return Library
+
+-- Create Main Window
+local Window = Library:Window({
+    Title = "Sarturn hub | Key system",
+    Icon = 127789553892918,
+    Theme = "EmeraldNight",
+    Config = {
+        Keybind = Enum.KeyCode.LeftControl,
+        Size = UDim2.new(0, 420, 0, 230)
+    },
+    CloseUIButton = {
+        Enabled = true,
+        Text = "Key gui"
+    }
+})
+
+local Tab = Window:Tab({Title = "Key", Icon = "11984980776"}) do
+
+Tab:Textbox({
+    Title = "Enter the Key",
+    Placeholder = "Type here...",
+    ClearTextOnFocus = false,
+    Callback = function(Value)
+        _G.EnteredKey = Value
+    end
+})
+
+Tab:Button({
+    Title = "Verify Access",
+    Callback = function()
+        if _G.EnteredKey == KeySettings.RealKey then
+            SaveKey(_G.EnteredKey) -- SALVA A KEY NO PC/CELULAR
+            SendSarturnNotif("Success", "Key saved and access granted!", 5)
+            ScreenGui:Destroy()
+            task.wait(1)
+            LoadSarturnMainHub()
+        else
+            SendSarturnNotif("Error", "Incorrect key!", 4)
+        end
+    end
+})
+
+Tab:Button({
+    Title = "Get Key (Link)",
+    Callback = function()
+        setclipboard(KeySettings.Link)
+        SendSarturnNotif("Copied", "Link sent to clipboard!", 3)
+    end
+})
+end
